@@ -1,6 +1,6 @@
 # Архитектура переиспользуемой основы
 
-Статус: целевой дизайн, реализация по [плану](development-plan.md). Решения: [decisions.md](decisions.md).
+Статус: целевой дизайн, реализация по [плану](development-plan.md). Уже работающий offline-срез описан в [implementation.md](implementation.md); он еще не реализует всю схему ниже. Решения: [decisions.md](decisions.md).
 
 ## 1. Граница между основой и соревнованием
 

@@ -5,6 +5,10 @@ __pycache__/
 .mypy_cache/
 .ruff_cache/
 .venv/
+.cache/
+dist/
+build/
+*.egg-info/
 
 # Editors and OS
 .idea/
@@ -23,11 +27,9 @@ kaggle.json
 # Local data and generated artifacts
 data/
 cache/
-runs/*.db
-runs/artifacts/
-runs/logs/
-research/raw/
-research/*.sqlite
+runs/
+**/research/raw/
+**/research/*.sqlite
 
 # Models and tabular artifacts
 *.bin

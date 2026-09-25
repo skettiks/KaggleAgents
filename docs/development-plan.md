@@ -1,6 +1,6 @@
 # План разработки KaggleAgents
 
-Обновлено: 25 сентября 2026. Статус всех этапов ниже — **запланировано**. Документационный каркас уже подготовлен; runtime пока отсутствует.
+Обновлено: 25 сентября 2026. **M1 и M2 в работе:** готов offline-срез для первых audit records, локальный CSV manifest/profiler и numeric submission validator. M0 на реальных competitions еще не выполнен; M3–M6 запланированы. Реальные команды и ограничения: [implementation.md](implementation.md).
 
 ## 1. Продуктовый результат
 
@@ -36,22 +36,32 @@ M0 Audit -> M1 Telemetry -> M2 Deterministic baseline -> M3 Recovery
 
 ### M1. Пакет, контракты и telemetry — 3–5 дней
 
-- [ ] Завести `pyproject.toml`, `uv.lock`, `src/` layout и минимальный CLI на Python 3.12.
-- [ ] Определить versioned TaskSpec, ExperimentSpec/Result и IDs attempts.
-- [ ] Реализовать structured events, timing и адаптер usage без записи secrets/transcripts в компактный отчет.
-- [ ] Добавить budget ledger: spent/reserved, неизвестная стоимость, limits и preflight checks.
-- [ ] Настроить CI: lint, contract tests и малый offline smoke на синтетических fixtures.
+- [x] Завести `pyproject.toml`, `uv.lock`, `src/` layout и минимальный CLI на Python 3.12.
+- [x] Определить предварительные v0 TaskSpec, ExperimentSpec/Result и IDs attempts.
+- [x] Реализовать файловые lifecycle events, timing и нормализованный usage report от worker.
+- [x] Добавить временные reservations и attempt cap в пределах одного CLI-запуска.
+- [ ] Подключить реальный provider usage adapter без записи secrets/transcripts в компактный отчет.
+- [ ] Дополнить budget ledger денежными/token reservations и preflight checks перед платными вызовами.
+- [x] Настроить CI: lint, contract tests и малый offline smoke на синтетических fixtures.
+
+Оставшаяся работа M1: реальный provider usage adapter, token/cost caps и проверка contracts по M0 traces.
+CI workflow добавлен; локальные проверки выполнены на Windows/Python 3.12. Прохождение Linux job проверяется после публикации кода.
 
 **Приемка:** один CLI-run проходит от task до summary; каждый retry учитывается; malformed input отклоняется до выполнения; CI не требует Kaggle/API credentials.
 
 ### M2. Детерминированный baseline — 5–8 дней
 
+- [x] Добавить конфигурацию CSV-данных, локальный manifest с hashes и ограниченный profiler.
+- [x] Связать синтетический tabular baseline с генерацией и проверкой submission artifact.
+- [x] Реализовать проверки одного numeric prediction: columns, row count, IDs/order, duplicates, finite values и bounds.
 - [ ] Реализовать metadata-first inspect/download, manifest, checksum и повторное использование cache.
-- [ ] Сделать компактный tabular profiler и hooks competition adapter.
+- [ ] Уточнить ML hooks competition adapter по первому реальному проекту.
 - [ ] Запускать training subprocess с timeout, CPU/RAM limits где поддерживаются и файловыми logs.
 - [ ] Подключить reference adapter первого проекта: split, train, predict, evaluate.
-- [ ] Реализовать checks submission: schema, row count, IDs/order, duplicates, NaN и диапазоны.
 - [ ] Проверить cache hit, поврежденный download, ошибку metric, timeout и cleanup дочерних процессов.
+
+Timeout, retries и файловые logs работают; CPU/RAM quotas и полноценная изоляция процессов остаются открытыми.
+Новый config с другими ID/target/prediction columns проверен тестом; это еще не заменяет второй реальный competition.
 
 **Приемка:** pipeline запускается без LLM и создает валидный artifact; повтор не скачивает неизмененные данные; версии кода/data/environment записаны. Неподдерживаемый hard resource limit явно виден в preflight.
 
@@ -143,7 +153,7 @@ docs/
 | P0-01 | Выбрать reference competitions и бюджеты | Два slug, критерии успеха и compute profile | — |
 | P0-02 | Описать первый validation protocol | Competition card + metric/split/seed | P0-01 |
 | P0-03 | Собрать пять audit-runs | Audit report + компактные records | P0-02 |
-| P1-01 | Создать Python package и offline CI | Установка, CLI entrypoint, green CI | P0-03 |
+| P1-01 | Создать Python package и offline CI | Локальные проверки пройдены, CI workflow добавлен | Подготовка разрешена до P0-03 по D-008 |
 | P1-02 | Определить contracts v0 и telemetry | Schema checks + run summary | P1-01 |
 | P1-03 | Реализовать budget ledger | Проверки reservation/retry/unknown cost | P1-02 |
 

@@ -1,0 +1,11 @@
+{
+  "schema_version": "0",
+  "train": "train.csv",
+  "test": "test.csv",
+  "sample_submission": "sample_submission.csv",
+  "id_column": "row_key",
+  "target_column": "target_value",
+  "prediction_column": "target_value",
+  "min_prediction": 0,
+  "max_prediction": 25
+}

@@ -60,3 +60,33 @@ Submission создается и проверяется автоматическ
 | M6 | Результат сравнения последовательного и параллельного режима, release checklist |
 
 GitHub уже выбран: публичный [skettiks/KaggleAgents](https://github.com/skettiks/KaggleAgents), ветка `main`.
+
+## D-008. Первый исполняемый срез до реального аудита
+
+**Принято для начала реализации.** Пока reference competitions и бюджет не выбраны, реализуется узкий
+offline-инструмент M1, необходимый для будущего M0-аудита. Синтетические runs не засчитываются в пять реальных
+baseline-runs. Это уточнение зависимости P1-01 от P0-03: инструмент сбора записей можно готовить раньше,
+а итоговые ML adapter contracts утверждаются после реальных traces.
+
+Реализованы предварительные Pydantic contracts с `schema_version=0`, JSON CLI и локальный Python subprocess
+по протоколу `--spec/--output`. Такой протокол связывает существующий competition-script с telemetry без
+преждевременного набора универсальных ML hooks. Финальные hooks из D-002 остаются задачей M2/M4.
+
+Текущее имя distribution — `kaggle-agents-foundation`, версия `0.1.0.dev0`, установка из исходников;
+публикация в package index не выполнена. Python 3.12 — целевой и проверенный runtime; package metadata
+допускает 3.12–3.14, но расширение CI matrix идет отдельно.
+
+Budget пока ограничивает wall time и attempts одного процесса. Нормализованные LLM usage/cost reports
+принимаются от worker; неизвестные значения остаются null. Provider billing adapter, денежные/token caps
+и persistent ledger не объявляются реализованными. SQLite и scheduler по D-005/D-004 следуют в M3/M5.
+
+## D-009. Узкий локальный CSV-контракт
+
+**Принято для раннего M2.** Чтобы проверить data plane без credentials и выбранного соревнования,
+добавлен `DatasetSpec` v0 для train/test/sample_submission, одного строкового ID и одного числового prediction.
+Имена колонок, bounds и пути принадлежат competition-проекту. Ядро предоставляет local manifest,
+sampled profiler и structural submission validator; ML split/fit/predict остаются в example-script.
+
+Статистика профиля явно отделяет first-N sample от полного row count. Raw rows/ID values в CLI и reports
+не возвращаются. Форматы за пределами UTF-8 CSV и multi-output predictions добавляются по реальным cases.
+`inspect` пока означает локальную инспекцию; Kaggle API, скачивание/cache и registry-bound validation — дальнейшие задачи.

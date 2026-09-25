@@ -1,0 +1,9 @@
+{
+  "schema_version": "0",
+  "task_id": "offline-audit",
+  "competition": "synthetic-offline-example",
+  "objective": "Verify experiment telemetry with a deterministic mean-regression baseline",
+  "rules_ref": "README.md",
+  "metric": {"name": "mae", "direction": "minimize"},
+  "budget": {"max_wall_seconds": 30, "max_attempts": 1}
+}

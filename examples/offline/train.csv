@@ -1,0 +1,13 @@
+row_key,feature_x,target_value
+train-01,0,2
+train-02,1,5
+train-03,2,4
+train-04,3,8
+train-05,4,7
+train-06,5,11
+train-07,6,10
+train-08,7,13
+train-09,8,14
+train-10,9,16
+train-11,10,17
+train-12,11,19

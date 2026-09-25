@@ -8,7 +8,14 @@ This repository is a reusable foundation. Competition-specific rules, metrics, s
 
 ## Current phase
 
-The project is in Phase 0: audit and vertical-slice definition. Prefer one working tabular path over generalized infrastructure.
+The project has an early M1/M2 offline slice: telemetry, local CSV inspection/profiling, and numeric submission validation. M0 real-competition audit remains pending. Prefer one working tabular path over generalized infrastructure. See `docs/implementation.md` for implemented commands and limitations.
+
+## Development checks
+
+- Install: `uv sync --locked --python 3.12`.
+- Check: `uv run --locked ruff check .` and `uv run --locked ruff format --check .`.
+- Test: `uv run --locked pytest`.
+- Offline smoke: `uv run --locked kaggle-agents run --project examples/offline`.
 
 ## Engineering rules
 

@@ -6,7 +6,24 @@
 
 ## Статус
 
-**Phase 0: проектирование.** В репозитории находятся план, решения и стартовые инструкции. Python-пакет, CLI, runner и шаблон нового competition пока не реализованы. Команды и деревья каталогов в документации описывают целевые интерфейсы.
+**M1 и часть M2: работающий offline-срез.** Реализованы Python-пакет, проверка конфигурации, CSV-manifest/profiler, запуск experiment-script, учет времени/попыток, artifacts и проверка submission. Аудит реального competition (M0) еще предстоит; полноценная система агентов и генератор проектов находятся в плане.
+
+## Попробовать сейчас
+
+С установленным `uv`, из корня репозитория:
+
+```text
+uv sync --locked --python 3.12
+uv run --locked kaggle-agents check --project examples/offline
+uv run --locked kaggle-agents inspect --project examples/offline
+uv run --locked kaggle-agents profile --project examples/offline
+uv run --locked kaggle-agents run --project examples/offline
+uv run --locked kaggle-agents validate-submission --project examples/offline --file runs/artifacts/<run_id>/attempt-001/submission.csv
+```
+
+В последней команде подставьте `run_id` из результата `run`. Синтетический пример запускается без Kaggle, GPU и LLM API. CLI возвращает краткий JSON; подробные результаты и logs сохраняются в игнорируемом каталоге `examples/offline/runs/`. Готовый PowerShell-сценарий есть в [README примера](examples/offline/README.md).
+
+Реальные команды, протокол worker и текущие ограничения: **[инструкция по реализации](docs/implementation.md)**.
 
 ## Что находится где
 
@@ -22,6 +39,7 @@
 
 ## Документация
 
+- [Реализованные команды](docs/implementation.md) — установка, запуск, telemetry и тесты.
 - [План разработки](docs/development-plan.md) — этапы, задачи, зависимости и критерии готовности.
 - [Архитектура](docs/architecture.md) — границы основы, агенты, очередь и контракты.
 - [Запуск нового соревнования](docs/competition-project.md) — целевой пользовательский сценарий.

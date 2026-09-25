@@ -1,0 +1,12 @@
+{
+  "schema_version": "0",
+  "experiment_id": "mean-baseline",
+  "hypothesis": "A train-only mean predictor establishes a repeatable MAE reference",
+  "split_id": "seeded-holdout-v1",
+  "seed": 42,
+  "script": "baseline.py",
+  "input_files": ["train.csv", "test.csv", "sample_submission.csv", "dataset.json"],
+  "params": {"validation_rows": 3, "dataset_config": "dataset.json"},
+  "timeout_seconds": 10,
+  "retry_on": []
+}

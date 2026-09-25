@@ -1,0 +1,39 @@
+name: Offline checks
+
+on:
+  push:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          version: "0.12.19"
+          enable-cache: true
+      - run: uv sync --locked --python 3.12
+      - run: uv run --locked ruff check .
+      - run: uv run --locked ruff format --check .
+      - run: uv run --locked pytest
+      - run: uv run --locked kaggle-agents check --project examples/offline
+      - run: uv run --locked kaggle-agents inspect --project examples/offline
+      - run: uv run --locked kaggle-agents profile --project examples/offline --max-rows 100
+      - name: Run baseline and validate its submission
+        shell: pwsh
+        run: |
+          $summary = uv run --locked kaggle-agents run --project examples/offline
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+          $result = $summary | ConvertFrom-Json
+          uv run --locked kaggle-agents validate-submission --project examples/offline --file "runs/artifacts/$($result.run_id)/attempt-001/submission.csv"
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+      - run: uv build
