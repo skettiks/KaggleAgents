@@ -1,0 +1,53 @@
+name: Competition run
+description: Track a reference competition used to validate the reusable foundation
+title: "[competition] "
+body:
+  - type: input
+    id: project
+    attributes:
+      label: Separate competition project
+      description: Repository URL or planned project name; competition-specific code belongs there
+    validations:
+      required: true
+  - type: input
+    id: slug
+    attributes:
+      label: Kaggle competition slug
+      placeholder: playground-series-sX-eY
+    validations:
+      required: true
+  - type: input
+    id: objective
+    attributes:
+      label: Objective
+      placeholder: Produce a reproducible validated baseline
+    validations:
+      required: true
+  - type: input
+    id: metric
+    attributes:
+      label: Official metric
+    validations:
+      required: true
+  - type: textarea
+    id: budget
+    attributes:
+      label: Budget
+      description: Wall time, LLM cost, CPU/GPU-hours, rows and disk limits
+    validations:
+      required: true
+  - type: textarea
+    id: constraints
+    attributes:
+      label: Competition constraints
+      description: External data, pretrained models, licensing and submission restrictions
+    validations:
+      required: true
+  - type: dropdown
+    id: submission
+    attributes:
+      label: Submission policy
+      options:
+        - Build and validate only
+    validations:
+      required: true
